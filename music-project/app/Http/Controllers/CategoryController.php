@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
+
 use Illuminate\Http\Request;
 use App\Models\Category;
 
@@ -22,49 +24,39 @@ class CategoryController extends Controller
      */
     public function create(Request $request)
     {
-        if ($request->has('add')) {
-            // validate dữ liệu từ form
-           $request->validate([
-                'name_category' => 'required|max:50'
-            ]);
-            $category = new Category;
-            $category->ma_tloai = $request->input('ma_tloai');
-            $category->ten_tloai = $request->input('name_category');
-            $category->save();
-            return redirect()->route('category.index')->with('success', 'Category added successfully.');
-        } else if( $request->has('update')){
-           
-            return redirect()->route('category.update');
-        }else{
-            return view('admin.categories.category', ['title' => 'Add new category']);
-        }
+
+        $category = new Category;
+        $category->ma_tloai = $request->input('ma_tloai');
+        $category->ten_tloai = $request->input('name_category');
+        $category->save();
     }
 
     /**
      * Store a newly created resource in storage.
      */
 
-    public function edit(string $id)
+    public function edit(string $id = null)
     {
-        
-        $category = Category::where('ma_tloai', $id)->get()->first();
-        $title = $category->ten_tloai;
-        return view('admin.categories.category', compact('category', 'title'));
+        if ($id == null) {
 
+            $title = 'Add new category';
+            return view('admin.categories.category', compact('title'));
+        } else {
+            $category = Category::where('ma_tloai', $id)->get()->first();
+            $title = $category->ten_tloai;
+            return view('admin.categories.category', compact('category', 'title'));
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        
-        if ($request->has('update')) {
-            // validate dữ liệu từ form
-           echo "đã cập nhật dữ liệu thành công";
-        }else{
-            return view('admin.categories.category', ['title' => 'Edit category']);
-        }
+        Category::where('ma_tloai', $request->input('id_category'))
+        ->update(['ten_tloai' => $request->input('name_category')]);
+
+      
     }
 
     /**
@@ -87,6 +79,29 @@ class CategoryController extends Controller
         } else {
             // If the user cancelled, redirect back to the delete form
             return view('admin.categories.delete', compact('id'));
+        }
+    }
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name_category' => 'required|max:50',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            // Kiểm tra xem action của button submit trước đó là thêm mới hay cập nhật
+            $action = $request->input('action');
+            if ($action == 'create') {
+                // Thực hiện gọi đến hàm create nếu dữ liệu hợp lệ
+                $this->create($request);
+                return redirect()->route('category.index')->with('success', 'Category added successfully.');
+            } elseif ($action == 'update') {
+                // Thực hiện gọi đến hàm update nếu dữ liệu hợp lệ
+                $this->update($request);
+                return redirect()->route('category.index')->with('success', 'Category updated successfully.');
+            }
+           
         }
     }
 }

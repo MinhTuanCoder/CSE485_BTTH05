@@ -4,7 +4,7 @@
 {{-- Nếu là giao diện thêm  --}}
 @if ($title == "Add new category")
 <h2 class="text-center text-upercase pt-5">Add new category</h2>
-<form class="container p-5" method="GET" >
+<form class="container p-5" method="GET" action="{{ route('category.store') }}">
   <div class="mb-3">
     <label class="form-label">ID</label>
     <input type="text" class="form-control" readonly>
@@ -14,12 +14,12 @@
     <label class="form-label">Category type</label>
     <input type="text" class="form-control" name="name_category">
   </div>
-  <button type="submit" name="add" class="btn btn-primary">ADD</button>
+  <button type="submit" name="action" value="create" class="btn btn-primary">ADD</button>
 </form>
 @else 
 {{-- Nếu là giao diện chỉnh sửa --}}
 <h2 class="text-center text-upercase">Edit category</h2>
-<form class="container p-5" method="GET">
+<form class="container p-5" method="HEAD" action="{{ route('category.store') }}">
   <div class="mb-3">
     <label class="form-label">ID</label>
     <input type="text" class="form-control" name="id_category" readonly value="{{ $category->ma_tloai }}">
@@ -29,7 +29,7 @@
     <label for="exampleInputPassword1" class="form-label">Category type</label>
     <input type="text" class="form-control" name="name_category" value='{{$category->ten_tloai}}'>
   </div>
-  <button type="submit" class="btn btn-primary" name="update">SAVE</button>
+  <button type="submit" class="btn btn-primary" name="action" value="update">SAVE</button>
 </form>
 @endif
 

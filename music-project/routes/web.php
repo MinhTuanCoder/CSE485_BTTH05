@@ -17,8 +17,8 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/',[HomeController::class,'getAllArticles']);
 Route::get('admin/category', [CategoryController::class,'index'])->name('category.index');
-// Route::get('admin/category/{id}', [CategoryController::class,'show'])->name('category.show');
-Route::get('admin/category/add', [CategoryController::class,'create'])->name('category.add');
+Route::get('admin/category/add', [CategoryController::class,'edit'])->name('category.add');
 Route::get('admin/category/{id}/edit', [CategoryController::class,'edit'])->name('category.edit');
 Route::get('admin/category/{id}/delete', [CategoryController::class,'destroy'])->name('category.delete');
 Route::get('admin/category/{id}/update', [CategoryController::class,'update'])->name('category.update');
+Route::get('admin/category/store', [CategoryController::class,'store'])->name('category.store');

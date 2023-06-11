@@ -23,7 +23,7 @@
                 <td> {{ $category->ten_tloai }}</td>
                 <td class='text-center'>
                     
-                    <a class='mx-3' href='{{ route('category.update',['id'=> $category->ma_tloai]) }}'><i
+                    <a class='mx-3' href='{{ route('category.edit',['id'=> $category->ma_tloai]) }}'><i
                             class='bi bi-pencil'></i></a>
                     <a class='' href='{{ route('category.delete',['id'=> $category->ma_tloai]) }}'><i
                             class='bi bi-trash3'></i></a>
